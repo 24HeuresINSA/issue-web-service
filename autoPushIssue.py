@@ -34,6 +34,22 @@ def push_issue(username, repo, token, title, content=None, labels=None, mileston
 
 
 def toMD(dict_data):
+    """
+    Convert json user story in MD for the issue
+    :param dict_data: json with
+    {
+    "title": "X",
+    "author": "X",
+    "priority": "p1",
+    "users" : ["USER1",
+               "USER2"],
+    "description": "X",
+    "tests":["test 1",
+            "test2."],
+    "commments": "X"
+    }
+    :return: The formated md data
+    """
     title = dict_data["title"]
     author = dict_data["author"]
     users = dict_data["users"]
@@ -57,6 +73,11 @@ def toMD(dict_data):
 
 
 def testsToMDList(tests):
+    """
+    Formating list test to MD issue check items
+    :param tests: list of string
+    :return: the formated MD
+    """
     formating = ""
     for test in tests:
         formating += f" - [ ] {test}  \n"
@@ -64,6 +85,11 @@ def testsToMDList(tests):
 
 
 def userToBadge(users):
+    """
+    Formating user list in badges
+    :param users: list of string
+    :return: the formated MD
+    """
     formating = ""
     for user in users:
         formating += f"``{user}`` "
@@ -71,12 +97,47 @@ def userToBadge(users):
 
 
 def dataFromJson(jsonfile):
+    """
+    List of tuple to use data
+    :param jsonfile: dict_data: json with
+    {
+    "title": "X",
+    "author": "X",
+    "priority": "p1",
+    "users" : ["USER1",
+               "USER2"],
+    "description": "X",
+    "tests":["test 1",
+            "test2."],
+    "commments": "X"
+    }
+    :return: tuple with (issueTitle, allValueInDict, issuePriority)
+    """
     with open(jsonfile, "r") as file:
         dbjson = json.load(file)
     return [(db["title"], db, db["priority"]) for db in dbjson]
 
 
 def dataFromMD(mdfile):
+    """
+    Parse MD file to get json user story format
+    :param mdfile: lis of user story like this
+    ```json
+    dict_data: json with
+    {
+    "title": "X",
+    "author": "X",
+    "priority": "p1",
+    "users" : ["USER1",
+               "USER2"],
+    "description": "X",
+    "tests":["test 1",
+            "test2."],
+    "commments": "X"
+    }
+    ```
+    :return: tuple with (issueTitle, allValueInDict, issuePriority)
+    """
     with open(mdfile, "r") as file:
         items = file.read().split("```json")[2:]
         for i in range(len(items)):
@@ -96,8 +157,9 @@ if __name__ == "__main__":
     parser.add_argument("repo", help="the github repository to push issues")
     parser.add_argument("--token", "-t", help="the github token with repo scope "
                                               "( to get one : https://github.com/settings/tokens/new)")
+    parser.add_argument("--milestone", help="Number of associate milestone", type=int)
     parser.add_argument("--json", "-j", help="Push issue from json file", action='store_true')
-    parser.add_argument("--markdonw", "-m", help="Push issue from markdown file", action='store_true')
+    parser.add_argument("--markdown", "-m", help="Push issue from markdown file", action='store_true')
     parser.add_argument("file", help="the file with issue")
     args = parser.parse_args()
 
@@ -106,9 +168,14 @@ if __name__ == "__main__":
     else:
         TOKEN = os.getenv('GH_TOKEN')
 
+    if args.milestone:
+        MILESTONE = args.milestone
+    else:
+        MILESTONE = None
+
     if args.json:
         data = dataFromJson(args.file)
-    elif args.markdonw:
+    elif args.markdown:
         data = dataFromMD(args.file)
     else:
         print("no format specify. Please specify one")
@@ -120,6 +187,6 @@ if __name__ == "__main__":
                           issue[0],
                           toMD(issue[1]),
                           ["enhancement", issue[2]] if issue[2] != "" else ["enhancement"],
-                          "1"
+                          MILESTONE
                           )
         print(f"{issue[0]} : {'✔️' if code.status_code == 201 else '❌ | return code : ' + code.text}")
