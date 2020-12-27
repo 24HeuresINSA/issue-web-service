@@ -33,6 +33,27 @@ def push_issue(username, repo, token, title, content=None, labels=None, mileston
     return response
 
 
+def get_issues(username, repo, token):
+    """
+    Geting all opened issue of the repo
+    :param username: the github username
+    :param repo: the github repository to push issues
+    :param token: the github token with repo scope ( to get one : https://github.com/settings/tokens/new)
+    :return: list of opened issue title from the repo
+    """
+    url = f"https://api.github.com/repos/{username}/{repo}/issues"
+
+    payload = {}
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    jsonResponse = json.loads(response.text)
+    return [title["title"] for title in jsonResponse]
+    print(response.text)
+
+
 def toMD(dict_data):
     """
     Convert json user story in MD for the issue
@@ -178,15 +199,21 @@ if __name__ == "__main__":
     elif args.markdown:
         data = dataFromMD(args.file)
     else:
+        data = None
         print("no format specify. Please specify one")
+        exit(1)
 
     for issue in data:
-        code = push_issue(args.user,
-                          args.repo,
-                          TOKEN,
-                          issue[0],
-                          toMD(issue[1]),
-                          ["enhancement", issue[2]] if issue[2] != "" else ["enhancement"],
-                          MILESTONE
-                          )
-        print(f"{issue[0]} : {'✔️' if code.status_code == 201 else '❌ | return code : ' + code.text}")
+        currentIssues = get_issues(args.user, args.repo, TOKEN)
+        if issue[0] not in currentIssues:
+            code = push_issue(username=args.user,
+                              repo=args.repo,
+                              token=TOKEN,
+                              title=issue[0],
+                              content=toMD(issue[1]),
+                              labels=["enhancement", issue[2]] if issue[2] != "" else ["enhancement"],
+                              milestone=MILESTONE,
+                              )
+            print(f"{issue[0]} : {'✔️' if code.status_code == 201 else '❌ | return code : ' + code.text}")
+        else:
+            print(f"{issue[0]} : Allready exists")
