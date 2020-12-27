@@ -151,14 +151,15 @@ Espace commentaire on peut se lacher
 -->
 
 ## List
-
+<!-- start  DO NOT DELETE THIS COMMENT -->
 ```json
+<!-- added to GitHub -->
 {
     "title": "Account creation",
     "author": "comSA",
     "priority": "p1", //LEAVE AS IT IS
     "users" : [
-        "GUEST",
+        "GUEST"
     ], // FILL THE LIST
     "description": "create an account",
     "tests":[
@@ -237,7 +238,7 @@ Espace commentaire on peut se lacher
     "author": "comSA",
     "priority": "p1", //LEAVE AS IT IS
     "users" : [
-        "GUEST",
+        "GUEST"
     ], // FILL THE LIST
     "description": "create an account",
     "tests":[
@@ -298,7 +299,7 @@ Espace commentaire on peut se lacher
     "author": "comSA",
     "priority": "p2", //LEAVE AS IT IS
     "users" : [
-        "USER",
+        "USER"
     ], // FILL THE LIST
     "description": "fill my personnal dispos and validate it FOREVER",
     "tests":[
@@ -316,7 +317,7 @@ Espace commentaire on peut se lacher
     "author": "Stophe and Ginny",
     "priority": "", //LEAVE AS IT IS
     "users" : [
-        "USER",
+        "USER"
     ], // FILL THE LIST
     "description": "manage who are my friends",
     "tests":[
@@ -343,7 +344,7 @@ Espace commentaire on peut se lacher
     "description": "use USER’s list of friend.",
     "tests":[
         "USERS can inspect their friends",
-        "ADMIN, BUREAU, HUMAIN can see other USERS friends",
+        "ADMIN, BUREAU, HUMAIN can see other USERS friends"
     ], // FILL THE LIST
     "commments": "La liste des amis est une donnée à caractère sensible, du coup géré par la partie donnée sensible"
 }
@@ -355,7 +356,7 @@ Espace commentaire on peut se lacher
     "author": "Stopghe and Ginny",
     "priority": "", //LEAVE AS IT IS
     "users" : [
-        "USER",
+        "USER"
     ], // FILL THE LIST
     "description": "use no critical personal data (name, first name, telephone number, …)",
     "tests":[
