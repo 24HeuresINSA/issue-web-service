@@ -1,7 +1,8 @@
 # Auto push issue from json or md
 
 ```
-usage: autoPushIssue.py [-h] [--token TOKEN] [--json] [--markdonw]
+usage: autoPushIssue.py [-h] [--token TOKEN] [--milestone MILESTONE] [--json]
+                        [--markdown]
                         user repo file
 
 positional arguments:
@@ -14,6 +15,8 @@ optional arguments:
   --token TOKEN, -t TOKEN
                         the github token with repo scope ( to get one :
                         https://github.com/settings/tokens/new)
+  --milestone MILESTONE
+                        Number of associate milestone
   --json, -j            Push issue from json file
-  --markdonw, -m        Push issue from markdown file
+  --markdown, -m        Push issue from markdown file
 ```
