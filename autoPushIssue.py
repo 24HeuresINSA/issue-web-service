@@ -37,7 +37,7 @@ def get_issues(username, repo, token):
     """
     Geting all opened and closed issues of the repo
     :param username: the github username
-    :param repo: the github repository to push issues
+    :param repo: the github repository to get issues
     :param token: the github token with repo scope ( to get one : https://github.com/settings/tokens/new)
     :return: list of all issues title from the repo
     """
@@ -79,17 +79,15 @@ def toMD(dict_data):
         comments = dict_data["commments"]
     except KeyError:
         comments = ""
-    return f"""
-# {title}
-#### author : {author}  
-### Scope : {userToBadge(users)}
-## Descriptiton  
-{description}
-## Test  
-{testsToMDList(tests)}
-{"## Comments" if comments != "" else ""}  
-{comments}
-"""
+    return f"# {title}" \
+           f"#### author : {author}" \
+           f"### Scope : {userToBadge(users)}" \
+           f"## Descriptiton" \
+           f"{description}" \
+           f"## Test" \
+           f"{testsToMDList(tests)}" \
+           f"{'## Comments' if comments != '' else ''}" \
+           f"{comments}"
 
 
 def testsToMDList(tests):
@@ -158,16 +156,18 @@ def dataFromMD(mdfile):
     ```
     :return: tuple with (issueTitle, allValueInDict, issuePriority)
     """
-    with open(mdfile, "r") as file:
-        items = file.read().split("```json")[2:]
-        for i in range(len(items)):
-            items[i] = items[i].replace("//LEAVE AS IT IS", "")
-            items[i] = items[i].replace("// FILL THE LIST", "")
-            items[i] = items[i].replace("```", "")
-            items[i] = items[i].replace("\n", "")
-            items[i] = items[i].strip()
-            db = json.loads(items[i])
-            items[i] = (db["title"], db, db["priority"])
+    with open(mdfile, "r") as f:
+        file = f.read()
+    items = file[file.index("<!-- start  DO NOT DELETE THIS COMMENT -->"):]
+    items = items.split("```json")[1:]
+    for i in range(len(items)):
+        items[i] = items[i].replace("//LEAVE AS IT IS", "")
+        items[i] = items[i].replace("// FILL THE LIST", "")
+        items[i] = items[i].replace("```", "")
+        items[i] = items[i].replace("\n", "")
+        items[i] = items[i].strip()
+        db = json.loads(items[i])
+        items[i] = (db["title"], db, db["priority"])
     return items
 
 
