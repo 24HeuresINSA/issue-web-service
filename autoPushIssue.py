@@ -35,13 +35,13 @@ def push_issue(username, repo, token, title, content=None, labels=None, mileston
 
 def get_issues(username, repo, token):
     """
-    Geting all opened issue of the repo
+    Geting all opened and closed issues of the repo
     :param username: the github username
     :param repo: the github repository to push issues
     :param token: the github token with repo scope ( to get one : https://github.com/settings/tokens/new)
-    :return: list of opened issue title from the repo
+    :return: list of all issues title from the repo
     """
-    url = f"https://api.github.com/repos/{username}/{repo}/issues"
+    url = f"https://api.github.com/repos/{username}/{repo}/issues?state=all"
 
     payload = {}
     headers = {
@@ -51,7 +51,6 @@ def get_issues(username, repo, token):
     response = requests.request("GET", url, headers=headers, data=payload)
     jsonResponse = json.loads(response.text)
     return [title["title"] for title in jsonResponse]
-    print(response.text)
 
 
 def toMD(dict_data):
@@ -205,6 +204,7 @@ if __name__ == "__main__":
 
     for issue in data:
         currentIssues = get_issues(args.user, args.repo, TOKEN)
+        print(currentIssues)
         if issue[0] not in currentIssues:
             code = push_issue(username=args.user,
                               repo=args.repo,
