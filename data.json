@@ -1,0 +1,57 @@
+[
+{
+    "title": "Account creation",
+    "author": "comSA",
+    "priority": "p1",
+    "users" : [
+        "GUEST"
+    ],
+    "description": "create an account",
+    "tests":[
+        "There is account creation form.",
+        "The account creation is secure.",
+        "The database is filled.",
+        "Form have ALL the options described in the specifications."
+    ],
+    "commments": "Do we accept all the new users? Or do you need an access link ?"
+}
+,
+
+
+
+{
+    "title": "Account logging in",
+    "author": "comSA",
+    "priority": "p1",
+    "users" : [
+        "USER"
+    ],
+    "description": "log in to my account",
+    "tests":[
+        "There is an account logging page",
+        "The connection is secure",
+        "The session is stored in cookies"
+    ]
+}
+,
+
+
+
+{
+    "title": "Editing Labels",
+    "author": "comSA",
+    "priority": "p1",
+    "users" : [
+        "HUMAIN",
+        "ADMIN",
+        "BUREAU"
+    ],
+    "description": "create/delete/edit colored labels",
+    "tests":[
+        "There is a label creation option on ADMINS interface",
+        "There is a label deletion option on ADMINS interface",
+        "There is a label modification option on ADMINS interface",
+        "Labels are stored in database"
+    ]
+}
+]
