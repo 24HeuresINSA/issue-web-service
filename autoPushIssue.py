@@ -86,14 +86,14 @@ def toMD(dict_data):
         comments = dict_data["comments"]
     except KeyError:
         comments = ""
-    return f"# {title}" \
-           f"#### author : {author}" \
-           f"### Scope : {userToBadge(users)}" \
-           f"## Description" \
-           f"{description}" \
-           f"## Test" \
-           f"{testsToMDList(tests)}" \
-           f"{'## Comments' if comments != '' else ''}" \
+    return f"# {title}  \n" \
+           f"#### author : {author}  \n" \
+           f"### Scope : {userToBadge(users)}  \n" \
+           f"## Description  \n" \
+           f"{description}  \n" \
+           f"## Test  \n" \
+           f"{testsToMDList(tests)}  \n" \
+           f"{'## Comments' if comments != '' else ''}   \n" \
            f"{comments}"
 
 
