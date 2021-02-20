@@ -35,7 +35,7 @@ def push_issue(username, repo, token, title, content=None, labels=None, mileston
 
 def get_issues(username, repo, token):
     """
-    Geting all opened and closed issues of the repo
+    Getting all opened and closed issues of the repo
     :param username: the github username
     :param repo: the github repository to get issues
     :param token: the github token with repo scope ( to get one : https://github.com/settings/tokens/new)
@@ -66,9 +66,9 @@ def toMD(dict_data):
     "description": "X",
     "tests":["test 1",
             "test2."],
-    "commments": "X"
+    "comments": "X"
     }
-    :return: The formated md data
+    :return: The formatted md data
     """
     title = dict_data["title"]
     author = dict_data["author"]
@@ -76,13 +76,13 @@ def toMD(dict_data):
     description = dict_data["description"]
     tests = dict_data["tests"]
     try:
-        comments = dict_data["commments"]
+        comments = dict_data["comments"]
     except KeyError:
         comments = ""
     return f"# {title}" \
            f"#### author : {author}" \
            f"### Scope : {userToBadge(users)}" \
-           f"## Descriptiton" \
+           f"## Description" \
            f"{description}" \
            f"## Test" \
            f"{testsToMDList(tests)}" \
@@ -92,26 +92,26 @@ def toMD(dict_data):
 
 def testsToMDList(tests):
     """
-    Formating list test to MD issue check items
+    Formatting list test to MD issue check items
     :param tests: list of string
-    :return: the formated MD
+    :return: the formatted MD
     """
-    formating = ""
+    formatting = ""
     for test in tests:
-        formating += f" - [ ] {test}  \n"
-    return formating
+        formatting += f" - [ ] {test}  \n"
+    return formatting
 
 
 def userToBadge(users):
     """
-    Formating user list in badges
+    Formatting user list in badges
     :param users: list of string
-    :return: the formated MD
+    :return: the formatted MD
     """
-    formating = ""
+    formatting = ""
     for user in users:
-        formating += f"``{user}`` "
-    return formating
+        formatting += f"``{user}`` "
+    return formatting
 
 
 def dataFromJson(jsonfile):
@@ -151,7 +151,7 @@ def dataFromMD(mdfile):
     "description": "X",
     "tests":["test 1",
             "test2."],
-    "commments": "X"
+    "comments": "X"
     }
     ```
     :return: tuple with (issueTitle, allValueInDict, issuePriority)
@@ -216,4 +216,4 @@ if __name__ == "__main__":
                               )
             print(f"{issue[0]} : {'✔️' if code.status_code == 201 else '❌ | return code : ' + code.text}")
         else:
-            print(f"{issue[0]} : Allready exists")
+            print(f"{issue[0]} : Already exists")
