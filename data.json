@@ -1,57 +1,67 @@
 [
 {
-    "title": "Account creation",
+    "title": "Hello world",
     "author": "comSA",
     "priority": "p1",
     "users" : [
-        "GUEST"
+        "*"
     ],
-    "description": "create an account",
+    "description": "create a nuxt app to setup dev environment",
     "tests":[
-        "There is account creation form.",
-        "The account creation is secure.",
-        "The database is filled.",
-        "Form have ALL the options described in the specifications."
-    ],
-    "commments": "Do we accept all the new users? Or do you need an access link ?"
-}
-,
-
-
-
+        "initialize the git repostry",
+        "compile the nuxt app"
+    ]
+},
 {
     "title": "Account logging in",
     "author": "comSA",
     "priority": "p1",
     "users" : [
-        "USER"
+        "*"
     ],
     "description": "log in to my account",
     "tests":[
         "There is an account logging page",
         "The connection is secure",
-        "The session is stored in cookies"
-    ]
-}
-,
-
-
-
+        "The session is stored in cookies",
+        "Login and get access to the app",
+        "Sign up button => redirect to [].24heure.org/signup"
+    ],
+    "comments": "URL : [].24heure.org/login"
+},
 {
-    "title": "Editing Labels",
+    "title": "Events selector",
     "author": "comSA",
     "priority": "p1",
     "users" : [
-        "HUMAIN",
-        "ADMIN",
-        "BUREAU"
+        "*"
     ],
-    "description": "create/delete/edit colored labels",
+    "description": "select event after login page",
     "tests":[
-        "There is a label creation option on ADMINS interface",
-        "There is a label deletion option on ADMINS interface",
-        "There is a label modification option on ADMINS interface",
-        "Labels are stored in database"
-    ]
+        "redirect to /login if not logged in",
+        "archive button",
+        "sign up to other events",
+        "display current events",
+        "upon selecting an event get redirected to the event home page : [].24heure.org/*event*"
+    ],
+    "comments": "URL : [].24heure.org/"
+},
+{
+    "title": "Home page",
+    "author": "comSA",
+    "priority": "p1",
+    "users" : [
+        "GUEST"
+    ],
+    "description": "Home page where the user can see his profile, notifcations and general information ",
+    "tests":[
+        "Nav bar to navigate the site",
+        "placeholder for the dropdown menu of the user menu",
+        "user card where user can see labels",
+        "user card where user can see name and other infos",
+        "user card where user can see his bar of charima",
+        "placeholder for the notification menu"
+    ],
+    "comments": "URL : [].24heure.org/*event*"
 }
 ]
