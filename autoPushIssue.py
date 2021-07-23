@@ -103,10 +103,7 @@ def testsToMDList(tests):
     :param tests: list of string
     :return: the formatted MD
     """
-    formatting = ""
-    for test in tests:
-        formatting += f" - [ ] {test}  \n"
-    return formatting
+    return '\n'.join([f" - [ ] {test}" for test in tests])
 
 
 def userToBadge(users):
@@ -115,10 +112,7 @@ def userToBadge(users):
     :param users: list of string
     :return: the formatted MD
     """
-    formatting = ""
-    for user in users:
-        formatting += f"``{user}`` "
-    return formatting
+    return ' '.join([f"``{user}``" for user in users])
 
 
 def dataFromJson(jsonfile):
