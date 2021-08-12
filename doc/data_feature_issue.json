@@ -1,0 +1,10 @@
+{
+        "title": "feature issue",
+        "tags": ["feature", "TODO"],
+        "url": "overbookd.24heures.org",
+        "scope": ["log", "bureau"],
+        "author": "moi",
+        "description": "blabla",
+        "tests": ["test 1", "test 2"],
+        "comment": "one commentary"
+    }

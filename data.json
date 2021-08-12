@@ -2,8 +2,8 @@
 {
     "title": "Hello world",
     "author": "comSA",
-    "priority": "p1",
-    "users" : [
+    "tags": "p1",
+    "scope" : [
         "*"
     ],
     "description": "create a nuxt app to setup dev environment",
@@ -15,8 +15,8 @@
 {
     "title": "Account logging in",
     "author": "comSA",
-    "priority": "p1",
-    "users" : [
+    "tags": "p1",
+    "scope" : [
         "*"
     ],
     "description": "log in to my account",
@@ -32,8 +32,8 @@
 {
     "title": "Events selector",
     "author": "comSA",
-    "priority": "p1",
-    "users" : [
+    "tags": "p1",
+    "scope" : [
         "*"
     ],
     "description": "select event after login page",
@@ -49,8 +49,8 @@
 {
     "title": "Home page",
     "author": "comSA",
-    "priority": "p1",
-    "users" : [
+    "tags": "p1",
+    "scope" : [
         "GUEST"
     ],
     "description": "Home page where the user can see his profile, notifcations and general information ",

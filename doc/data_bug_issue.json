@@ -1,0 +1,9 @@
+{
+    "title": "bug issue",
+    "tags": ["bug", "TODO"],
+    "url": "overbookd.24heures.org",
+    "scope": ["log", "bureau"],
+    "author": "moi",
+    "description": "blabla",
+    "steps": ["faire ca", "faire ci"]
+}
