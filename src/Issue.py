@@ -32,7 +32,7 @@ class Issue:
        """
 
         if not self.body:
-            raise ValueError("body not define")
+            raise ValueError("body not define, call MD generator first")
 
         if isinstance(self.data, list):
             raise TypeError("Use pushIssues for multiple issues")
