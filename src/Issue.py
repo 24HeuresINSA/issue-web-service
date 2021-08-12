@@ -1,3 +1,5 @@
+import os.path
+
 import requests
 import json
 import datetime
@@ -82,6 +84,26 @@ class Issue:
         response = requests.request("GET", url, headers=headers, data=payload)
         jsonResponse = json.loads(response.text)
         return [jsonIssue["title"] for jsonIssue in jsonResponse]
+
+    def uploadImage(self, image):
+        """
+        Upload an image to gitlab for issue attachment
+        :param image: byte image
+        :return: markdown code
+        """
+
+        url = f"https://gitlab.com/api/v4/projects/{self.repo.replace('/', '%2F')}/uploads"
+        files = [('file',
+                  (image.name.split("/")[-1],
+                   image,
+                   f'image/{image.name.split("/")[-1].split(".")[-1]}'))
+                 ]
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        response = requests.request("POST", url, headers=headers, files=files)
+
+        return json.loads(response.text)["markdown"]
 
     def checkDuplicateTitle(self):
         """
