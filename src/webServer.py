@@ -2,12 +2,15 @@ import flask
 import os
 from functools import wraps
 from Issue import Issue
+import json
 
 app = flask.Flask(__name__)
 
 key = os.getenv("KEY")
 GL_TOKEN = os.getenv("GL_TOKEN")
 GH_TOKEN = os.getenv("GH_TOKEN")
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 def checkKey(issue_dict, issue_key):
@@ -39,6 +42,10 @@ def requireApiKey(view_function):
     return decorated_function
 
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route("/version", methods=["GET"])
 def version():
     with open("version", "r") as versionNumber:
@@ -47,7 +54,13 @@ def version():
 
 @app.route("/bug", methods=["POST"])
 def bugIssue():
-    bug_issue = flask.request.json
+    if 'file' not in flask.request.files:
+        return 'No file field', 400
+    file = flask.request.files['file']
+    if file.filename == '':
+        return 'No selected file', 400
+
+    bug_issue = json.loads(flask.request.form.to_dict()['json'])
     checkCommonKey(bug_issue)
     checkKey(bug_issue, "steps")
 
@@ -67,6 +80,11 @@ def bugIssue():
         data=bug_issue,
         milestone=milestone
     )
+
+    if file and allowed_file(file.filename):
+        issue.uploadImage(file)
+    else:
+        return f"Only {ALLOWED_EXTENSIONS} files authorized"
 
     issue.generateMDIssue()
     return_statement = issue.pushIssue()

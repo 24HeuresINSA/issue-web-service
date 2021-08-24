@@ -18,6 +18,7 @@ class Issue:
         self.repo = repo
         self.token = token
         self.data = data
+        self.data["attachment"] = []
         self.body = None  # Need to call one md generator
         self.milestone = milestone
         if not git_platform:
@@ -94,16 +95,14 @@ class Issue:
 
         url = f"https://gitlab.com/api/v4/projects/{self.repo.replace('/', '%2F')}/uploads"
         files = [('file',
-                  (image.name.split("/")[-1],
-                   image,
-                   f'image/{image.name.split("/")[-1].split(".")[-1]}'))
+                  (image.filename, image, f'{image.content_type}'))
                  ]
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
         response = requests.request("POST", url, headers=headers, files=files)
 
-        return json.loads(response.text)["markdown"]
+        self.data["attachment"].append(json.loads(response.text)["markdown"])
 
     def checkDuplicateTitle(self):
         """
@@ -214,4 +213,6 @@ class Issue:
                     f"{'# Etapes pour reproduire le bug' if bugsSteps != '' else ''} \n" \
                     f"{bugsSteps}" \
                     f"{'## Comments' if comments != '' else ''}   \n" \
-                    f"{comments}"
+                    f"{comments}" \
+                    f"{'# Attachment' if self.data['attachment'] else ''} \n" \
+                    f"{' '.join([image for image in self.data['attachment']])}"
