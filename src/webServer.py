@@ -67,27 +67,27 @@ def bugIssue(issueType):
     if file.filename == '':
         return 'No selected file', 400
 
-    bug_issue = json.loads(flask.request.form.to_dict()['json'])
-    checkCommonKey(bug_issue)
+    newIssue = json.loads(flask.request.form.to_dict()['json'])
+    checkCommonKey(newIssue)
     if issueType == BUG:
-        checkKey(bug_issue, "steps")
+        checkKey(newIssue, "steps")
     if issueType == FEATURE:
-        checkKey(bug_issue, "tests")
+        checkKey(newIssue, "tests")
 
-    bug_issue["tags"].append("TODO")
-    bug_issue["tags"].append(issueType)
+    newIssue["tags"].append("TODO")
+    newIssue["tags"].append(issueType)
 
     try:
-        milestone = bug_issue["milestone"]
+        milestone = newIssue["milestone"]
     except KeyError:
         milestone = None
         pass
 
     issue = Issue(
-        repo=bug_issue["repo"],
-        git_platform=bug_issue["git_platform"],
-        token=GL_TOKEN if bug_issue["git_platform"] == "gitlab" else GH_TOKEN,
-        data=bug_issue,
+        repo=newIssue["repo"],
+        git_platform=newIssue["git_platform"],
+        token=GL_TOKEN if newIssue["git_platform"] == "gitlab" else GH_TOKEN,
+        data=newIssue,
         milestone=milestone
     )
 

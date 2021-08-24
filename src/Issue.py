@@ -17,7 +17,7 @@ class Issue:
 
         self.repo = repo
         self.token = token
-        self.data = data
+        self.data = {} if not data else data
         self.data["attachment"] = []
         self.body = None  # Need to call one md generator
         self.milestone = milestone
@@ -66,7 +66,7 @@ class Issue:
             self.data = issue
             if not self.checkDuplicateTitle():
                 self.generateMDIssue()
-                self.pushIssue()
+                print(self.pushIssue())
 
     def getIssues(self):
         """
@@ -202,6 +202,11 @@ class Issue:
         except KeyError:
             url = ""
 
+        try:
+            attachment = self.data['attachment']
+        except KeyError:
+            attachment = ""
+
         self.body = f"# Date {datetime.date.today().strftime('%d/%m/%Y')}\n\n" \
                     f"#{'URL' if url != '' else ''} {url} \n\n" \
                     f"# Author {self.data['author']} \n\n" \
@@ -214,5 +219,5 @@ class Issue:
                     f"{bugsSteps}" \
                     f"{'## Comments' if comments != '' else ''}   \n" \
                     f"{comments}" \
-                    f"{'# Attachment' if self.data['attachment'] else ''} \n" \
-                    f"{' '.join([image for image in self.data['attachment']])}"
+                    f"{'# Attachment' if attachment != '' else ''} \n" \
+                    f"{' '.join([image for image in self.data['attachment']]) if attachment != '' else ''}"
