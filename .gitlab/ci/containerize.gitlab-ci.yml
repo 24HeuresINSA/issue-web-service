@@ -4,6 +4,8 @@ containerize:
     - name: docker:dind
       command: ["--experimental"]
   stage: docker
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
   before_script:
     - mkdir -p ~/.docker/cli-plugins
     - mv buildx ~/.docker/cli-plugins/docker-buildx

@@ -3,6 +3,7 @@ buildx:
   stage: setup
   variables:
     GIT_STRATEGY: none
+    DOCKER_HOST: tcp://localhost:2375
   artifacts:
     paths:
       - buildx
