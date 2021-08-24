@@ -11,6 +11,8 @@ GL_TOKEN = os.getenv("GL_TOKEN")
 GH_TOKEN = os.getenv("GH_TOKEN")
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+FEATURE = "feature"
+BUG = "bug"
 
 
 def checkKey(issue_dict, issue_key):
@@ -29,21 +31,23 @@ def checkCommonKey(issue_to_test):
     checkKey(issue_to_test, "description")
 
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def requireApiKey(view_function):
     """
     Decorator for API key
     """
+
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
         if flask.request.headers.get('x-api-key') == key:
             return view_function(*args, **kwargs)
         else:
             flask.abort(401)
+
     return decorated_function
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/version", methods=["GET"])
@@ -52,8 +56,11 @@ def version():
         return versionNumber.read()
 
 
-@app.route("/bug", methods=["POST"])
-def bugIssue():
+@app.route("/<string:issueType>", methods=["POST"])
+def bugIssue(issueType):
+    if issueType not in [BUG, FEATURE]:
+        return "Request should be bug or feature", 400
+
     if 'file' not in flask.request.files:
         return 'No file field', 400
     file = flask.request.files['file']
@@ -62,10 +69,13 @@ def bugIssue():
 
     bug_issue = json.loads(flask.request.form.to_dict()['json'])
     checkCommonKey(bug_issue)
-    checkKey(bug_issue, "steps")
+    if issueType == BUG:
+        checkKey(bug_issue, "steps")
+    if issueType == FEATURE:
+        checkKey(bug_issue, "tests")
 
-    for tag in ["bug", "TODO"]:
-        bug_issue["tags"].append(tag)
+    bug_issue["tags"].append("TODO")
+    bug_issue["tags"].append(issueType)
 
     try:
         milestone = bug_issue["milestone"]
@@ -85,38 +95,6 @@ def bugIssue():
         issue.uploadImage(file)
     else:
         return f"Only {ALLOWED_EXTENSIONS} files authorized"
-
-    issue.generateMDIssue()
-    return_statement = issue.pushIssue()
-    if isinstance(return_statement, str):
-        return return_statement
-    else:
-        return return_statement.text, return_statement.status_code
-
-
-@app.route("/feature", methods=["POST"])
-def featureIssue():
-    feature_issue = flask.request.json
-    checkCommonKey(feature_issue)
-    checkKey(feature_issue, "tests")
-
-    for tag in ["feature", "TODO"]:
-        feature_issue["tags"].append(tag)
-
-    try:
-        milestone = feature_issue["milestone"]
-    except KeyError:
-        milestone = None
-        pass
-
-    issue = Issue(
-        repo=feature_issue["repo"],
-        git_platform=feature_issue["git_platform"],
-        token=GL_TOKEN if feature_issue["git_platform"] == "gitlab" else GH_TOKEN,
-        data=feature_issue,
-        milestone=milestone
-    )
-
     issue.generateMDIssue()
     return_statement = issue.pushIssue()
     if isinstance(return_statement, str):
